@@ -1,0 +1,27 @@
+group 'org.avaje'
+version '1.1-SNAPSHOT'
+
+ext {
+    projectName = 'shutdown-delay'
+    projectDescription = 'Provides a shutdown delay for JVM Runtime'
+    projectUrl = 'https://github.com/avaje-x/avaje-shutdown-delay'
+    scmDeveloperConnection = 'scm:git:https://github.com/avaje-x/avaje-shutdown-delay.git'
+}
+
+apply plugin: 'java'
+apply from: "${gradle_common}/oss.gradle"
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    testCompile 'org.avaje.composite:composite-testing:3.1'
+}
+
+test {
+    useTestNG()
+}
