@@ -13,7 +13,7 @@ public class ShutdownDelayTest {
 
     ActiveCount activeCount = new ActiveCount(100, 10, 5);
 
-    // delay by 1 second to allow DI container to start
+    // delay to allow DI container to start
     // and for all runtime hooks to be registered
     ShutdownDelay.register(100, activeCount.asRunnable());
 
@@ -50,7 +50,7 @@ public class ShutdownDelayTest {
   @Test
   public void testWithCustomDelay() throws Exception {
 
-    // delay by 1 second to allow DI container to start
+    // delay to allow DI container to start
     // and for all runtime hooks to be registered
     ShutdownDelay.register(100, new Delay());
 
