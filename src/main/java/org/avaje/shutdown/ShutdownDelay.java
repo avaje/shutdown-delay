@@ -12,6 +12,12 @@ import java.util.TimerTask;
 
 /**
  * Provides a mechanism to delay JVM shutdown.
+ * <p>
+ * Effectively removes all the registered shutdown hooks and registers a single
+ * 'master' shutdown hook. At shutdown the master shutdown hook calls a delayCallback
+ * which can have application specific logic used to delay the shutdown (until all active
+ * requests are processed etc).
+ * </p>
  */
 public class ShutdownDelay {
 
@@ -94,7 +100,7 @@ public class ShutdownDelay {
   private void shutdownAll() {
     synchronized (ShutdownDelay.class) {
       if (registeredHooks != null) {
-        logger.info("executing normal shutdown hooks");
+        logger.info("executing shutdown hooks");
         for (Thread hook : registeredHooks) {
           hook.start();
         }

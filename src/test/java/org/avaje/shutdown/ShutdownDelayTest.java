@@ -9,16 +9,54 @@ public class ShutdownDelayTest {
   private static final Logger logger = LoggerFactory.getLogger(ShutdownDelayTest.class);
 
   @Test
-  public void testRegister() throws Exception {
+  public void testWithActiveCount_hitMaxWait() throws Exception {
 
+    ActiveCount activeCount = new ActiveCount(100, 10, 5);
 
-    // delay by 1 second to allow DI container to start etc
-    ShutdownDelay.register(1000, new Delay());
+    // delay by 1 second to allow DI container to start
+    // and for all runtime hooks to be registered
+    ShutdownDelay.register(100, activeCount.asRunnable());
 
     // simulate container starting with a shutdown hook
-    Thread.sleep(500);
     Runtime.getRuntime().addShutdownHook(new PoolShutdown());
-    Thread.sleep(800);
+    Thread.sleep(200);
+
+    // make an active request that doesn't complete
+    // so we end up hitting max wait
+    activeCount.increment();
+    logger.info("test completed" );
+  }
+
+  @Test
+  public void testWithActiveCount() throws Exception {
+
+
+    ActiveCount activeCount = new ActiveCount(100, 10, 10);
+
+    // delay by 1 second to allow DI container to start
+    // and for all runtime hooks to be registered
+    ShutdownDelay.register(1000, activeCount.asRunnable());
+
+    // simulate container starting with a shutdown hook
+    Runtime.getRuntime().addShutdownHook(new PoolShutdown());
+    Thread.sleep(1200);
+
+    activeCount.increment();
+    activeCount.decrement();
+
+    logger.info("test completed" );
+  }
+
+  @Test
+  public void testWithCustomDelay() throws Exception {
+
+    // delay by 1 second to allow DI container to start
+    // and for all runtime hooks to be registered
+    ShutdownDelay.register(100, new Delay());
+
+    // simulate container starting with a shutdown hook
+    Runtime.getRuntime().addShutdownHook(new PoolShutdown());
+    Thread.sleep(200);
 
     logger.info("test completed" );
   }

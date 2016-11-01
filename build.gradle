@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile group:'org.slf4j', name:'slf4j-api', version:'1.7.+'
+    compileOnly 'org.slf4j:slf4j-api:1.7.21'
     testCompile 'org.avaje.composite:composite-testing:3.1'
 }
 
