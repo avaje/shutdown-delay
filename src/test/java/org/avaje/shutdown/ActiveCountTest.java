@@ -2,6 +2,8 @@ package org.avaje.shutdown;
 
 import org.testng.annotations.Test;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.*;
 
@@ -24,7 +26,11 @@ public class ActiveCountTest {
   @Test
   public void testAsRunnable() throws Exception {
 
-    ActiveCount active = new ActiveCount(300, 10, 10);
+    ActiveCount active = new ActiveCountBuilder()
+        .initialDelay(300)
+        .maxPause(10)
+        .pauseMillis(10).build();
+
     Runnable runnable = active.asRunnable();
     runnable.run();
   }

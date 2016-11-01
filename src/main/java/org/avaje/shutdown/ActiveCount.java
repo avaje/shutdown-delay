@@ -75,7 +75,9 @@ public class ActiveCount {
   }
 
   /**
-   * Return a runnable.
+   * Return a runnable that executes the underlying shutdownWaitUntilIdle().
+   *
+   * @return A Runnable instance that executes the underlying shutdownWaitUntilIdle().
    */
   public Runnable asRunnable() {
     return new Runnable() {
@@ -100,6 +102,9 @@ public class ActiveCount {
     }
   }
 
+  /**
+   * Loop/wait until Idle or we hit maxPauseCount.
+   */
   void untilIdle() {
     int i = 0;
     do {
@@ -117,7 +122,7 @@ public class ActiveCount {
         throw new RuntimeException(e);
       }
 
-    } while (i < maxPauseCount); // max wait 20 seconds - 500*40
+    } while (i < maxPauseCount);
     logger.warn("Maximum wait, not idle but shutting down anyway");
   }
 }
